@@ -7,11 +7,7 @@
  *
  ********************************/
 
-import java.sql.ResultSet;
-import java.sql.Statement;
-import java.sql.SQLException;
-import java.sql.DriverManager;
-import java.sql.Connection;
+import java.sql.*;
 
 public class Main {
 
@@ -25,14 +21,14 @@ public class Main {
         Class.forName("com.mysql.cj.jdbc.Driver");
 
         // stringa connessione localhost
-        //String url = Credentials.getConnectionStringLocal();
-        //String user = Credentials.getUserLocal();
-        //String psw = Credentials.getPasswordLocal();
+        String url = Credentials.getConnectionStringLocal();
+        String user = Credentials.getUserLocal();
+        String psw = Credentials.getPasswordLocal();
 
-        // stringa connessione Azure
-        String url = Credentials.getConnectionStringAzure();
-        String user = Credentials.getUser();
-        String psw = Credentials.getPassword();
+//        // stringa connessione Azure
+//        String url = Credentials.getConnectionStringAzure();
+//        String user = Credentials.getUser();
+//        String psw = Credentials.getPassword();
 
         Connection connection = DriverManager.getConnection(url, user, psw);
 
@@ -41,23 +37,30 @@ public class Main {
         Statement statement = connection.createStatement();
 
         String sqlQuery = "CALL costumi_economici_gender(\"M\");";
-
         //String sqlQuery = "CALL costumi_economici_user('m', \"%s%\", 400.00);";
 
         ResultSet resultSet = statement.executeQuery(sqlQuery);
-
         stampa("Query eseguita: \t" + sqlQuery + "\n");
 
-        stampa("TIPO" + "\t|\t" + "NOME"+"\t|\t" + "TAGLIA" + "\t|\t"+"COSTO" +
-                "\n*******************************************************");
 
+        ResultSetMetaData metaData = resultSet.getMetaData();
+        //numero di colonne
+        int count = metaData.getColumnCount();
+        String[] columnName = new String[count];
+
+        for (int i = 1; i <= count; i++)
+        {
+            columnName[i-1] = metaData.getColumnLabel(i);
+            System.out.print(columnName[i-1] + "\t|\t");
+        }
+
+        stampa("\n");
 
         while (resultSet.next()){
-
-            stampa(resultSet.getString("tipo")+ "\t|\t" +
-                    resultSet.getString("nome")+ "\t|\t" +
-                    resultSet.getString("taglia")+ "\t|\t" +
-                    resultSet.getString("costo"));
+            stampa(resultSet.getString(columnName[0])+ "\t|\t" +
+                    resultSet.getString(columnName[1])+ "\t|\t" +
+                    resultSet.getString(columnName[2])+ "\t|\t" +
+                    resultSet.getString(columnName[3]));
         }
 
         connection.close();
