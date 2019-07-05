@@ -8,7 +8,7 @@
  ********************************/
 
 
-public class Credentials {
+public abstract class Credentials {
 
     private static final String dbName = "acme_societa";
 

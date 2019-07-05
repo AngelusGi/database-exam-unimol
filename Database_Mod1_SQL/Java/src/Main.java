@@ -18,6 +18,7 @@ public class Main {
 
     public static void main(String[] args) throws ClassNotFoundException, SQLException {
 
+        //aggiungere Project Stucture > Library > Maven > mysql:mysql-connector-java:8.0.16
         Class.forName("com.mysql.cj.jdbc.Driver");
 
         // stringa connessione localhost
