@@ -56,10 +56,11 @@ namespace ProgettoBasiDati
 
                         try
                         {
+                            Print("\t========================================================================");
                             for (var index = 0; index < readerQuery.VisibleFieldCount; index++)
                                 Console.Write("\t" + readerQuery.GetName(index));
 
-                            Print("\n\n");
+                            Print("\n\t========================================================================\n\n");
 
                             while (readerQuery.Read())
                             {

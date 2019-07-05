@@ -29,13 +29,13 @@ namespace ProgettoBasiDati
 
             switch (selectedMenu)
             {
-                case (int) QueryType.StoredProcedure:
-                    return _querySql.QueryFullCustom(selectedMenu);
+                case (int) QueryType.ViewSiGePr:
+                    return _querySql.QueryFullCustom();
 
-                case (int) QueryType.StoredProcedureGender:
+                case (int) QueryType.ViewGender:
                     Print("Inserisci il sesso: ");
                     var gender = Console.ReadLine();
-                    return _querySql.CallQuery(selectedMenu, gender);
+                    return _querySql.CallQuery(gender);
 
                 //in caso di null - ritornare inserimento query custom
                 default:

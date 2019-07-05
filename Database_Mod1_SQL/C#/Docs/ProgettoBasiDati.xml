@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>ProgettoBasiDati</name>
+    </assembly>
+    <members>
+        <member name="M:ProgettoBasiDati.Connection.ConnectionMenu">
+            <summary>
+                Stampa il menu per la scelta del database da utilizzare.
+            </summary>
+            <returns>Una stringa di connessione.</returns>
+        </member>
+        <member name="M:ProgettoBasiDati.Connection.DbConnect(System.Int32)">
+            <summary>
+                Imposta la stringa di connessione scelta.
+            </summary>
+            <param name="selezione">Connessione selezionata.</param>
+            <returns>Stringa di connessione scelta (Azure o LocalHost).</returns>
+        </member>
+        <member name="M:ProgettoBasiDati.Connection.SelectMenu">
+            <summary>
+                Legge la scelta effettuata nel menù.
+            </summary>
+            <returns>Valore inserito</returns>
+        </member>
+        <member name="M:ProgettoBasiDati.Connection.PromptMenu">
+            <summary>
+                Stampa il menù.
+            </summary>
+        </member>
+        <member name="M:ProgettoBasiDati.QuerySql.QueryMenu">
+            <summary>
+                Stampa il menù di query disponibili, oppure è possibile inserirne una nuova.
+            </summary>
+        </member>
+        <member name="M:ProgettoBasiDati.QuerySql.QueryFullCustom">
+            <summary>
+                Esegue una query completamente personalizzata.
+            </summary>
+            <returns>Stringa contenente il risultato della query.</returns>
+        </member>
+        <member name="M:ProgettoBasiDati.QuerySql.CallQuery(System.Int32)">
+            <summary>
+                Invoca una query.
+            </summary>
+            <param name="selection">Voce selezionata da menu.</param>
+            <returns>Stringa contenente il risultato della query.</returns>
+        </member>
+        <member name="M:ProgettoBasiDati.QuerySql.CallQuery(System.String,System.String,System.Double)">
+            <summary>
+                Invoca una query ad una vista che utilizza i seguenti parametri.
+            </summary>
+            <param name="gender">Sesso del costume.</param>
+            <param name="size">Taglia del costume.</param>
+            <param name="price">Prezzo massimo del costume.</param>
+            <returns>Stringa contenente il risultato della query.</returns>
+        </member>
+        <member name="M:ProgettoBasiDati.QuerySql.CallQuery(System.String)">
+            <summary>
+                Invoca una query ad una vista che utilizza i seguenti parametri.
+            </summary>
+            <param name="gender">Sesso del costume.</param>
+            <returns>Stringa contenente il risultato della query.</returns>
+        </member>
+    </members>
+</doc>

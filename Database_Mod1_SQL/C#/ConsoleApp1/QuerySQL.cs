@@ -6,8 +6,8 @@ namespace ProgettoBasiDati
     {
         Exit,
         CustomQuery,
-        StoredProcedure,
-        StoredProcedureGender
+        ViewSiGePr,
+        ViewGender
     }
 
     internal class QuerySql
@@ -24,8 +24,8 @@ namespace ProgettoBasiDati
         {
             Print("Quale query vuoi eseguire: " +
                   $"\n{(int) QueryType.CustomQuery}. Query personalizzata" +
-                  $"\n{(int) QueryType.StoredProcedure}. Stampa tutti i costumi, selezionando il sesso, la taglia e il prezzo" +
-                  $"\n{(int) QueryType.StoredProcedureGender}. Stampa tutti i costumi economici disponibili selezionando il sesso" +
+                  $"\n{(int) QueryType.ViewSiGePr}. Stampa tutti i costumi, selezionando il sesso, la taglia e il prezzo" +
+                  $"\n{(int) QueryType.ViewGender}. Stampa tutti i costumi economici disponibili selezionando il sesso" +
                   $"\n\t{(int) QueryType.Exit}. USCIRE");
         }
 
@@ -33,9 +33,8 @@ namespace ProgettoBasiDati
         /// <summary>
         ///     Esegue una query completamente personalizzata.
         /// </summary>
-        /// <param name="selectedMenu">Voce del menu selezionata.</param>
         /// <returns>Stringa contenente il risultato della query.</returns>
-        public string QueryFullCustom(int selectedMenu)
+        public string QueryFullCustom()
         {
             Print("Inserisci il sesso: ");
             var gender = Console.ReadLine();
@@ -46,7 +45,7 @@ namespace ProgettoBasiDati
             Print("Inserisci la prezzo:");
             var price = double.Parse(Console.ReadLine());
 
-            return CallQuery(selectedMenu, gender, size, price);
+            return CallQuery(gender, size, price);
         }
 
         /// <summary>
@@ -82,14 +81,13 @@ namespace ProgettoBasiDati
         }
 
         /// <summary>
-        ///     Invoca uno stored procedure che, per fare la query utilizza i seguenti parametri.
+        ///     Invoca una query ad una vista che utilizza i seguenti parametri.
         /// </summary>
-        /// <param name="selection">Voce selezionata del menu.</param>
         /// <param name="gender">Sesso del costume.</param>
         /// <param name="size">Taglia del costume.</param>
         /// <param name="price">Prezzo massimo del costume.</param>
         /// <returns>Stringa contenente il risultato della query.</returns>
-        public string CallQuery(int selection, string gender, string size, double price)
+        public string CallQuery(string gender, string size, double price)
         {
             var querySql = "CALL costumi_economici_user('" + gender + "', \"%" + size + "%\", " + price + ");";
 
@@ -97,12 +95,11 @@ namespace ProgettoBasiDati
         }
 
         /// <summary>
-        ///     Invoca uno stored procedure che, per fare la query utilizza i seguenti parametri.
+        ///     Invoca una query ad una vista che utilizza i seguenti parametri.
         /// </summary>
-        /// <param name="selection">Voce selezionata del menu.</param>
         /// <param name="gender">Sesso del costume.</param>
         /// <returns>Stringa contenente il risultato della query.</returns>
-        public string CallQuery(int selection, string gender)
+        public string CallQuery(string gender)
         {
             var querySql = "CALL costumi_economici_gender('" + gender + "');";
 
