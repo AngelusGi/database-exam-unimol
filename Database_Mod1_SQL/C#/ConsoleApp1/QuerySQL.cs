@@ -1,83 +1,112 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace ProgettoBasiDati
 {
-    class QuerySQL
+    internal enum QueryType
     {
+        Exit,
+        CustomQuery,
+        StoredProcedure,
+        StoredProcedureGender
+    }
 
-        private static void stampa(String stringa)
+    internal class QuerySql
+    {
+        private static void Print(string text)
         {
-            Console.WriteLine(stringa);
+            Console.WriteLine(text);
         }
 
-        public void queryMenu()
+        /// <summary>
+        ///     Stampa il menù di query disponibili, oppure è possibile inserirne una nuova.
+        /// </summary>
+        public void QueryMenu()
         {
-            stampa("Quale query vuoi eseguire: " +
-                   "\n1. Query personalizzata" +
-                   "\n2. Stampa tutti i costumi, selezionando il sesso, la taglia e il prezzo" +
-                   "\n3. Stampa tutti i costumi economici disponibili selezionando il sesso" +
-                   "\n\t 0. USCIRE");
+            Print("Quale query vuoi eseguire: " +
+                  $"\n{(int) QueryType.CustomQuery}. Query personalizzata" +
+                  $"\n{(int) QueryType.StoredProcedure}. Stampa tutti i costumi, selezionando il sesso, la taglia e il prezzo" +
+                  $"\n{(int) QueryType.StoredProcedureGender}. Stampa tutti i costumi economici disponibili selezionando il sesso" +
+                  $"\n\t{(int) QueryType.Exit}. USCIRE");
         }
 
-        public string queryFullCustom(int selectedMenu)
+
+        /// <summary>
+        ///     Esegue una query completamente personalizzata.
+        /// </summary>
+        /// <param name="selectedMenu">Voce del menu selezionata.</param>
+        /// <returns>Stringa contenente il risultato della query.</returns>
+        public string QueryFullCustom(int selectedMenu)
         {
-            stampa("Inserisci il sesso: ");
-            string gender = Console.ReadLine();
+            Print("Inserisci il sesso: ");
+            var gender = Console.ReadLine();
 
-            stampa("Inserisci la taglia:");
-            string size = Console.ReadLine();
+            Print("Inserisci la taglia:");
+            var size = Console.ReadLine();
 
-            stampa("Inserisci la prezzo:");
-            string prezzoReadLine = Console.ReadLine();
-            double prezzo = Double.Parse(prezzoReadLine);
+            Print("Inserisci la prezzo:");
+            var price = double.Parse(Console.ReadLine());
 
-            return callQuery(selectedMenu, gender, size, prezzo);
+            return CallQuery(selectedMenu, gender, size, price);
         }
-        public String callQuery(int selezione)
-        {
-            string querySQL;
 
-            if (selezione == 1)
+        /// <summary>
+        ///     Invoca una query.
+        /// </summary>
+        /// <param name="selection">Voce selezionata da menu.</param>
+        /// <returns>Stringa contenente il risultato della query.</returns>
+        public string CallQuery(int selection)
+        {
+            string querySql;
+
+            if (selection.Equals(1))
             {
-                string dbName = "use acme_societa; ";
+                var dbName = "use acme_societa; ";
 
-                stampa("Inserisci la selezione:");
-                string select = Console.ReadLine();
+                Print("Inserisci la selezione:");
+                var select = Console.ReadLine();
 
-                stampa("Inserisci la tabella:");
-                string from = Console.ReadLine();
+                Print("Inserisci la tabella:");
+                var from = Console.ReadLine();
 
-                stampa("Inserisci la condizione:");
-                string where = Console.ReadLine();
+                Print("Inserisci la condizione:");
+                var where = Console.ReadLine();
 
-                querySQL = (dbName + " " + select + " " + from + " " + where + " ;");
+                querySql = dbName + " " + select + " " + from + " " + where + " ;";
             }
             else
             {
-                querySQL = null;
+                querySql = null;
             }
 
-            return querySQL;
+            return querySql;
         }
 
-        public String callQuery(int selezione, string gender, string size, double price)
+        /// <summary>
+        ///     Invoca uno stored procedure che, per fare la query utilizza i seguenti parametri.
+        /// </summary>
+        /// <param name="selection">Voce selezionata del menu.</param>
+        /// <param name="gender">Sesso del costume.</param>
+        /// <param name="size">Taglia del costume.</param>
+        /// <param name="price">Prezzo massimo del costume.</param>
+        /// <returns>Stringa contenente il risultato della query.</returns>
+        public string CallQuery(int selection, string gender, string size, double price)
         {
-            string querySQL;
+            var querySql = "CALL costumi_economici_user('" + gender + "', \"%" + size + "%\", " + price + ");";
 
-            querySQL = "CALL costumi_economici_user('" + gender + "', \"%" + size + "%\", " + price + ");";
-
-            return querySQL;
+            return querySql;
         }
 
-        public String callQuery(int selezione, string gender)
+        /// <summary>
+        ///     Invoca uno stored procedure che, per fare la query utilizza i seguenti parametri.
+        /// </summary>
+        /// <param name="selection">Voce selezionata del menu.</param>
+        /// <param name="gender">Sesso del costume.</param>
+        /// <returns>Stringa contenente il risultato della query.</returns>
+        public string CallQuery(int selection, string gender)
         {
-            string querySQL;
-            querySQL = "CALL costumi_economici_gender('" + gender + "');";
+            var querySql = "CALL costumi_economici_gender('" + gender + "');";
 
-            return querySQL;
+            return querySql;
         }
-
     }
 }

@@ -1,84 +1,96 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Security.Policy;
-using System.Text;
 
 namespace ProgettoBasiDati
 {
-    class Connection
+    internal enum ConnectionType
     {
-        private static void stampa(string stringa)
+        Exit = 0,
+        LocalHost = 1,
+        Azure = 2
+    }
+
+    internal class Connection
+    {
+        private const string LocalUserName = "LOCAL_USERNAME";
+        private const string LocalPassword = "LOCAL_PASSWORD";
+
+        private const string ConnectionStringLocal = "server=localhost;user=" + LocalUserName + ";database=" + DbName +
+                                                     ";port=" + PortNumber + ";password=" + LocalPassword + "";
+
+        private const string ConnectionStringAzure = "server=" + Url + ";user=" + UserName + "@" + ServerName +
+                                                     ";database=" + DbName + ";port=" + PortNumber + ";password=" +
+                                                     Password + "";
+
+        private static void Print(string stringa)
         {
             Console.WriteLine(stringa);
         }
 
-        private static string localUserName = "USER_LOCALHOST";
-        private static string localPassword = "PASSWORD_LOCALHOST";
 
-        // AZURE CREDENTIALS
-        private static string userName = "USER_AZURE";
-        private static string password = "PASSWORD_AZURE";
-        private static string serverName = "SERVER_AZURE";
-        private static string url = serverName + ".mysql.database.azure.com";
-        private static string dbName = "acme_societa";
-        private static string portNumber = "3306";
-
-
-        private static string connectionStringLocal = "server=localhost;user=" + localUserName + ";database=" +
-                                               dbName + ";port=" + portNumber + ";password=" + localPassword + "";
-
-        private static string connectionStringAzure = "server=" + url + ";user=" + userName + "@" + serverName +
-                                  ";database=" + dbName + ";port=" + portNumber + ";password=" + password + "";
-
-
+        /// <summary>
+        ///     Stampa il menu per la scelta del database da utilizzare.
+        /// </summary>
+        /// <returns>Una stringa di connessione.</returns>
         public static string ConnectionMenu()
         {
-            promptMenu();
+            PromptMenu();
 
-            int selectedMenu = selectMenu();
+            var selectedMenu = SelectMenu();
 
-            return dbConnect(selectedMenu);
-
+            return DbConnect(selectedMenu);
         }
 
-        private static string dbConnect(int selezione)
+        /// <summary>
+        ///     Imposta la stringa di connessione scelta.
+        /// </summary>
+        /// <param name="selezione">Connessione selezionata.</param>
+        /// <returns>Stringa di connessione scelta (Azure o LocalHost).</returns>
+        private static string DbConnect(int selezione)
         {
-            string connectionString;
             switch (selezione)
             {
-                case 1:
-                    connectionString = connectionStringLocal;
-                    break;
-                case 2:
-                    connectionString = connectionStringAzure;
-                    break;
+                case (int) ConnectionType.LocalHost:
+                    return ConnectionStringLocal;
+
+                case (int) ConnectionType.Azure:
+                    return ConnectionStringAzure;
+
                 default:
-                    connectionString = null;
-                    break;
+                    return null;
             }
-
-            return connectionString;
         }
 
-        private static int selectMenu()
+        /// <summary>
+        ///     Legge la scelta effettuata nel menù.
+        /// </summary>
+        /// <returns>Valore inserito</returns>
+        private static int SelectMenu()
         {
-            stampa("Scelta -> ");
+            Print("Scelta -> ");
 
-            string userSelection = Console.ReadLine();
-
-            int selection = Int32.Parse(userSelection);
-
-            return selection;
+            return int.Parse(Console.ReadLine());
         }
-  
 
-        private static void promptMenu()
+        /// <summary>
+        ///     Stampa il menù.
+        /// </summary>
+        private static void PromptMenu()
         {
-            stampa("Quale database vuoi utilizzare: " +
-                   "\n1. local host con MySQL" +
-                   "\n2. Microsoft Azure con MySQL" +
-                   "\n\t 0. USCIRE");
+            Print("Quale database vuoi utilizzare: " +
+                  $"\n{(int) ConnectionType.LocalHost}. Localhost con MySQL" +
+                  $"\n{(int) ConnectionType.Azure}. Microsoft Azure con MySQL" +
+                  $"\n\t{(int) ConnectionType.Exit}. USCIRE");
         }
 
+        #region AzureCredentials
+
+        private const string UserName = "USER_AZURE";
+        private const string Password = "PASSWORD_AZURE";
+        private const string ServerName = "SERVER_AZURE";
+        private const string Url = ServerName + ".mysql.database.azure.com";
+        private const string DbName = "acme_societa";
+        private const string PortNumber = "3306";
+
+        #endregion
     }
 }

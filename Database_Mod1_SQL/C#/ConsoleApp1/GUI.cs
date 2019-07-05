@@ -1,67 +1,58 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace ProgettoBasiDati
 {
-
-    class GUI
+    internal class Gui
     {
-        private static void stampa(String stringa)
+        private readonly QuerySql _querySql = new QuerySql();
+
+
+        private static void Print(string stringa)
         {
             Console.WriteLine(stringa);
         }
 
-        public static void menuIntro()
+        public static void MenuIntro()
         {
-            stampa("***Query progetto Basi di Dati***" +
-                   "\n\tUniMol AA2018-2019" +
-                   "\n\tProf. Francesco Mercaldo" +
-                   "\n\tCandidato: Varrati\n\n");
+            Print("***Query progetto Basi di Dati***" +
+                  "\n\tUniMol AA2018-2019" +
+                  "\n\tProf. Francesco Mercaldo" +
+                  "\n\tCandidato: Varrati\n\n");
         }
 
-        QuerySQL querySql = new QuerySQL();
 
         public string Menu()
         {
-            querySql.queryMenu();
+            _querySql.QueryMenu();
 
+            var selectedMenu = SelectMenu();
 
-            int selectedMenu = selectMenu();
-            if ((selectedMenu != 2) && (selectedMenu != 3))
+            switch (selectedMenu)
             {
-                return querySql.callQuery(selectedMenu);
-            }
-            else if(selectedMenu == 2)
-            {
-                return querySql.queryFullCustom(selectedMenu);
-            }
-            else
-            {
-                stampa("Inserisci il sesso: ");
-                string gender = Console.ReadLine();
-                return querySql.callQuery(selectedMenu, gender);
-            }
-            
-            //in caso di null - ritornare inserimento query custom
+                case (int) QueryType.StoredProcedure:
+                    return _querySql.QueryFullCustom(selectedMenu);
 
+                case (int) QueryType.StoredProcedureGender:
+                    Print("Inserisci il sesso: ");
+                    var gender = Console.ReadLine();
+                    return _querySql.CallQuery(selectedMenu, gender);
+
+                //in caso di null - ritornare inserimento query custom
+                default:
+                    return _querySql.CallQuery(selectedMenu);
+            }
         }
 
-        
 
-        private int selectMenu()
+        private int SelectMenu()
         {
+            Print("Scelta -> ");
 
-            stampa( "Scelta -> ");
+            var userSelection = Console.ReadLine();
 
-            string userSelection = Console.ReadLine();
-            
-            int selection = Int32.Parse(userSelection);
+            var selection = int.Parse(userSelection);
 
             return selection;
         }
-
-        
-
     }
 }
