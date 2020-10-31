@@ -1,0 +1,11 @@
+/*
+MODIFICA IL IL CAMPO DELL'ENTITA "SOCIETA"
+    DA "SEDE" A "INDIRIZZO"
+*/
+
+USE acme_societa;
+
+ALTER TABLE societa
+CHANGE COLUMN `sede` `indirizzo`
+VARCHAR(45)
+NOT NULL;
